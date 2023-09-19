@@ -1,7 +1,16 @@
+using WebApplicationACFtechnologies.Models;
+using WebApplicationACFtechnologies.Repositorios.Contrato;
+using WebApplicationACFtechnologies.Repositorios.Implementacion;
+using System.Data.SqlClient;
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IGenericRepository<Cliente>, ClienteRepository>();
 
 var app = builder.Build();
 

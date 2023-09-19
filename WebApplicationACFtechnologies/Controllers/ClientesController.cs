@@ -34,12 +34,12 @@ namespace NombreDeTuProyecto.Controllers
                         {
                             Cliente cliente = new Cliente
                             {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Identification = reader["Identification"].ToString(),
-                                PrimerNombre = reader["PrimerNombre"].ToString(),
-                                PrimerApellido = reader["PrimerApellido"].ToString(),
-                                Edad = Convert.ToInt32(reader["Edad"]),
-                                FechaDeCreacion = Convert.ToDateTime(reader["FechaDeCreacion"])
+                                
+                                identificacion = reader["Identification"].ToString(),
+                                primerNombre = reader["PrimerNombre"].ToString(),
+                                primerApellido = reader["PrimerApellido"].ToString(),
+                                edad = Convert.ToInt32(reader["Edad"]),
+                                fechaDeCreacion = Convert.ToDateTime(reader["FechaDeCreacion"])
                             };
                             clientes.Add(cliente);
                         }

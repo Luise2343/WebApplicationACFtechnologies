@@ -4,12 +4,11 @@ namespace WebApplicationACFtechnologies.Models
 {
     public class Cliente
     {
-        public int Id { get; set; }
-        public string Identification { get; set; }
-        public string PrimerNombre { get; set; }
-        public string PrimerApellido { get; set;}   
-        public int Edad { get; set; }
-        public DateTime FechaDeCreacion { get; set; }
+        public string identificacion { get; set; }
+        public string primerNombre { get; set; }
+        public string primerApellido { get; set;}   
+        public int edad { get; set; }
+        public string fechaDeCreacion { get; set; }
 
     }
 }
