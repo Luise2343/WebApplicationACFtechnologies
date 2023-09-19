@@ -2,7 +2,74 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row justify-content-center">
+
+    <div class="col-10">
+
+        <div class="alert alert-info" role="alert">
+            Mantenimiento de Clientes
+        </div>
+        <button type="button" class="btn btn-success btn-sm boton-nuevo-cliente">Nuevo Empleado</button>
+
+        <table class="table table-striped" id="tablaClientes">
+            <thead>
+                <tr>
+                    <th>Primer Nombre</th>
+                    <th>Primer Apellido</th>
+                    <th>Edad </th>
+                    <th>Fecha de Creación</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+    </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalCliente " tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="mb-3">
+                    <label class="form-label">Primer Nombre</label>
+                    <input type="text" class="form-control" id="txtPrimerNombre" autocomplete="off">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Primer Apellido</label>
+                    <input type="text" class="form-control" id="txtPrimerApellido" autocomplete="off">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Edad</label>
+                    <input type="number" class="form-control" id="txtEdad">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Creacion</label>
+                    <input type="text" class="form-control" id="txtFechaCreacion">
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary boton-guardar-cambios-clientes">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/js/index.js"></script>
+}
