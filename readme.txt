@@ -1,3 +1,18 @@
+Scritp de creacion de base de datos:
+CREATE DATABASE DBClientes ;
+
+USE DBClientes;
+
+CREATE TABLE Clientes (
+    Identificacion INT PRIMARY KEY,
+    PrimerNombre NVARCHAR(50),
+    PrimerApellido NVARCHAR(50),
+    Edad INT,
+    FechaCreacion DATETIME
+);
+
+
+
 *------------------------Procedimiento de almacenamieto*----------------------------------
 ALTER PROCEDURE [dbo].[EditarCliente]
     @Identificacion INT,
