@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WebApplicationACFtechnologies.Models
+﻿namespace WebApplicationACFtechnologies.Models
 {
     public class Cliente
     {
@@ -10,14 +8,5 @@ namespace WebApplicationACFtechnologies.Models
         public int edad { get; set; }
         public string fechaDeCreacion { get; set; }
 
-        // Propiedad adicional para el nombre completo
-        public string nombreCompleto
-        {
-            get
-            {
-                // Combina el primer nombre y el primer apellido con un espacio en blanco
-                return $"{primerNombre} {primerApellido}";
-            }
-        }
     }
 }

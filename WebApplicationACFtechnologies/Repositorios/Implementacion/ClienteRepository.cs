@@ -8,44 +8,57 @@ namespace WebApplicationACFtechnologies.Repositorios.Implementacion
 {
     public class ClienteRepository : IGenericRepository<Cliente>
     {
-        public readonly string _cadenaSQL_ = "";
-        private object _lista;
+        public readonly string _cadenaSQL = "";
+        //private object _lista;
 
         public ClienteRepository(IConfiguration configuracion)
         {
-            _cadenaSQL_ = configuracion.GetConnectionString("_cadenaSQL_");
+            _cadenaSQL = configuracion.GetConnectionString("_cadenaSQL");
         }
 
 
         public async Task<List<Cliente>> Lista()
         {
-            List<Cliente> lista = new List<Cliente>();
-            using (var conexcion = new SqlConnection(_cadenaSQL_))
+            try
             {
-                conexcion.Open();
-                SqlCommand cmd = new SqlCommand("ListaClientes", conexcion);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                using (var dr = await cmd.ExecuteReaderAsync())
+                List<Cliente> lista = new List<Cliente>();
+                using (var conexion = new SqlConnection(_cadenaSQL))
                 {
-                    while (await dr.ReadAsync())
+                    await conexion.OpenAsync();
+                    using (var cmd = new SqlCommand("ListarClientes", conexion))
                     {
-                        lista.Add(new Cliente
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (var dr = await cmd.ExecuteReaderAsync())
                         {
-                            identificacion = Convert.ToInt32(dr["identificacion"]),
-                            primerNombre = dr["nombreCompleto"].ToString(),
-                            edad = Convert.ToInt32(dr["edad"]),
-                            fechaDeCreacion = dr["fechaDeCreacion"].ToString()
-                        });
-                    };
+                            while (await dr.ReadAsync())
+                            {
+                                lista.Add(new Cliente
+                                {
+                                    identificacion = Convert.ToInt32(dr["identificacion"]),
+                                    primerNombre = dr["primerNombre"].ToString(),
+                                    primerApellido = dr["primerApellido"].ToString(),
+                                    edad = Convert.ToInt32(dr["edad"]),
+                                    fechaDeCreacion = dr["fechaDeCreacion"].ToString()
+                                });
+                            }
+                        }
+                    }
                 }
-            }
-            return lista;
 
+                return lista; // Agregamos el retorno de la lista.
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones: Registra el error o realiza alguna acción específica para identificar el problema.
+                Console.WriteLine($"Error en Lista(): {ex.Message}");
+                throw; // Opcionalmente, puedes lanzar la excepción nuevamente.
+            }
         }
+
+
         public async Task<bool> Guardar(Cliente Modelo)
         {
-            using (var conexcion = new SqlConnection(_cadenaSQL_))
+            using (var conexcion = new SqlConnection(_cadenaSQL))
             {
                 conexcion.Open();
                 SqlCommand cmd = new SqlCommand("InsertarCliente", conexcion);
@@ -64,7 +77,7 @@ namespace WebApplicationACFtechnologies.Repositorios.Implementacion
         }
         public async Task<bool> Editar(Cliente Modelo)
         {
-            using (var conexcion = new SqlConnection(_cadenaSQL_))
+            using (var conexcion = new SqlConnection(_cadenaSQL))
             {
                 conexcion.Open();
                 SqlCommand cmd = new SqlCommand("EditarCliente", conexcion);
@@ -85,7 +98,7 @@ namespace WebApplicationACFtechnologies.Repositorios.Implementacion
 
         public async Task<bool> Eliminar(int identificacion)
         {
-            using (var conexcion = new SqlConnection(_cadenaSQL_))
+            using (var conexcion = new SqlConnection(_cadenaSQL))
             {
                 conexcion.Open();
                 SqlCommand cmd = new SqlCommand("EliminarCliente", conexcion);

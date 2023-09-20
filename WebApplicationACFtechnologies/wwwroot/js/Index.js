@@ -5,19 +5,16 @@
     edad: 0,
     fechaDeCreacion: ""
 }
-function MostrarClientes() {
 
+function MostrarClientes() {
     fetch("/Home/listaClientes")
         .then(response => {
-            return response.ok ? response.json() : Promise.reject(response)
+            return response.ok ? response.json() : Promise.reject(response);
         })
         .then(responseJson => {
             if (responseJson.length > 0) {
-
                 $("#tablaClientes tbody").html("");
-
-
-                responseJson.forEach((cliente) => {
+                responseJson.forEach(cliente => {
                     $("#tablaClientes tbody").append(
                         $("<tr>").append(
                             $("<td>").text(cliente.primerNombre),
@@ -26,108 +23,65 @@ function MostrarClientes() {
                             $("<td>").text(cliente.fechaDeCreacion),
                             $("<td>").append(
                                 $("<button>").addClass("btn btn-primary btn-sm boton-editar-cliente").text("Editar").data("dataCliente", cliente),
-                                $("<button>").addClass("btn btn-danger btn-sm ms-2 boton-eliminar-cliente").text("Eliminar").data("dataCliente", cliente),
+                                $("<button>").addClass("btn btn-danger btn-sm ms-2 boton-eliminar-cliente").text("Eliminar").data("dataCliente", cliente)
                             )
                         )
                     )
                 })
-
             }
-
-
-        })
-
-
+        });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
-
-    MostrarEmpleados();
-
-    fetch("/Home/listaDepartamentos")
-        .then(response => {
-            return response.ok ? response.json() : Promise.reject(response)
-        })
-        .then(responseJson => {
-
-            if (responseJson.length > 0) {
-                responseJson.forEach((item) => {
-
-                    $("#cboDepartamento").append(
-                        $("<option>").val(item.idDepartamento).text(item.nombre)
-                    )
-
-                })
-            }
-
-        })
-
-    $("#txtFechaContrato").datepicker({
+    MostrarClientes();
+    $("#txtFechaCreacion").datepicker({
         format: "dd/mm/yyyy",
         autoclose: true,
         todayHighlight: true
-    })
-
-
-}, false)
-
+    });
+}, false);
 
 function MostrarModal() {
-
-    $("#txtNombreCompleto").val(_modeloEmpleado.nombreCompleto);
-    $("#cboDepartamento").val(_modeloEmpleado.idDepartamento == 0 ? $("#cboDepartamento option:first").val() : _modeloEmpleado.idDepartamento)
-    $("#txtSueldo").val(_modeloEmpleado.sueldo);
-    $("#txtFechaContrato").val(_modeloEmpleado.fechaContrato)
-
-
-    $("#modalEmpleado").modal("show");
-
+    $("#txtPrimerNombre").val(_modeloCliente.primerNombre);
+    $("#txtPrimerApellido").val(_modeloCliente.primerApellido);
+    $("#txtEdad").val(_modeloCliente.edad);
+    $("#txtFechaCreacion").val(_modeloCliente.fechaDeCreacion);
+    $("#modalCliente").modal("show");
 }
 
-$(document).on("click", ".boton-nuevo-empleado", function () {
-
-    _modeloEmpleado.idEmpleado = 0;
-    _modeloEmpleado.nombreCompleto = "";
-    _modeloEmpleado.idDepartamento = 0;
-    _modeloEmpleado.sueldo = 0;
-    _modeloEmpleado.fechaContrato = "";
-
+$(document).on("click", ".boton-nuevo-cliente", function () {
+    _modeloCliente.identificacion = 0;
+    _modeloCliente.primerNombre = "";
+    _modeloCliente.primerApellido = "";
+    _modeloCliente.edad = 0;
+    _modeloCliente.fechaDeCreacion = "";
     MostrarModal();
+});
 
-})
-
-$(document).on("click", ".boton-editar-empleado", function () {
-
-    const _empleado = $(this).data("dataEmpleado");
-
-
-    _modeloEmpleado.idEmpleado = _empleado.idEmpleado;
-    _modeloEmpleado.nombreCompleto = _empleado.nombreCompleto;
-    _modeloEmpleado.idDepartamento = _empleado.refDepartamento.idDepartamento;
-    _modeloEmpleado.sueldo = _empleado.sueldo;
-    _modeloEmpleado.fechaContrato = _empleado.fechaContrato;
-
+$(document).on("click", ".boton-editar-cliente", function () {
+    const _cliente = $(this).data("dataCliente");
+    _modeloCliente.identificacion = _cliente.identificacion;
+    _modeloCliente.primerNombre = _cliente.primerNombre;
+    _modeloCliente.primerApellido = _cliente.primerApellido; 
+    _modeloCliente.edad = _cliente.edad;
+    _modeloCliente.fechaDeCreacion = _cliente.fechaDeCreacion;
     MostrarModal();
+});
 
-})
-
-$(document).on("click", ".boton-guardar-cambios-empleado", function () {
+$(document).on("click", ".boton-guardar-cambios-clientes", function () {
 
     const modelo = {
-        idEmpleado: _modeloEmpleado.idEmpleado,
-        nombreCompleto: $("#txtNombreCompleto").val(),
-        refDepartamento: {
-            idDepartamento: $("#cboDepartamento").val()
-        },
-        sueldo: $("#txtSueldo").val(),
-        fechaContrato: $("#txtFechaContrato").val()
+        identificacion: _modeloCliente.identificacion,
+        primerNombre: $("#txtPrimerNombre").val(),
+        primerApellido: $("#txtPrimerApellido").val(),  
+        edad: $("#txtedad").val(),
+        fechaDeCreacion: $("#txtFechaCreacion").val()
     }
 
 
-    if (_modeloEmpleado.idEmpleado == 0) {
+    if (_modeloCliente.identificacion == 0) {
 
-        fetch("/Home/guardarEmpleado", {
+        fetch("/Home/guardarCliente", {
             method: "POST",
             headers: { "Content-Type": "application/json; charset=utf-8" },
             body: JSON.stringify(modelo)
@@ -138,9 +92,9 @@ $(document).on("click", ".boton-guardar-cambios-empleado", function () {
             .then(responseJson => {
 
                 if (responseJson.valor) {
-                    $("#modalEmpleado").modal("hide");
-                    Swal.fire("Listo!", "Empleado fue creado", "success");
-                    MostrarEmpleados();
+                    $("#modalCliente").modal("hide");
+                    Swal.fire("Listo!", "Cliente fue creado", "success");
+                    MostrarCliente();
                 }
                 else
                     Swal.fire("Lo sentimos", "No se puedo crear", "error");
@@ -148,7 +102,7 @@ $(document).on("click", ".boton-guardar-cambios-empleado", function () {
 
     } else {
 
-        fetch("/Home/editarEmpleado", {
+        fetch("/Home/editarCliente", {
             method: "PUT",
             headers: { "Content-Type": "application/json; charset=utf-8" },
             body: JSON.stringify(modelo)
@@ -159,8 +113,8 @@ $(document).on("click", ".boton-guardar-cambios-empleado", function () {
             .then(responseJson => {
 
                 if (responseJson.valor) {
-                    $("#modalEmpleado").modal("hide");
-                    Swal.fire("Listo!", "Empleado fue actualizado", "success");
+                    $("#modalCliente").modal("hide");
+                    Swal.fire("Listo!", "Cliente fue actualizado", "success");
                     MostrarEmpleados();
                 }
                 else
@@ -173,13 +127,13 @@ $(document).on("click", ".boton-guardar-cambios-empleado", function () {
 })
 
 
-$(document).on("click", ".boton-eliminar-empleado", function () {
+$(document).on("click", ".boton-eliminar-cliente", function () {
 
-    const _empleado = $(this).data("dataEmpleado");
+    const _cliente = $(this).data("dataCliente");
 
     Swal.fire({
         title: "Esta seguro?",
-        text: `Eliminar empleado "${_empleado.nombreCompleto}"`,
+        text: `Eliminar cliente "${_cliente.primerNombre}"`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -190,7 +144,7 @@ $(document).on("click", ".boton-eliminar-empleado", function () {
 
         if (result.isConfirmed) {
 
-            fetch(`/Home/eliminarEmpleado?idEmpleado=${_empleado.idEmpleado}`, {
+            fetch(`/Home/eliminarCliente?identificacion=${_cliente.identificacion}`, {
                 method: "DELETE"
             })
                 .then(response => {
@@ -199,7 +153,7 @@ $(document).on("click", ".boton-eliminar-empleado", function () {
                 .then(responseJson => {
 
                     if (responseJson.valor) {
-                        Swal.fire("Listo!", "Empleado fue elminado", "success");
+                        Swal.fire("Listo!", "Cliente fue elminado", "success");
                         MostrarEmpleados();
                     }
                     else
